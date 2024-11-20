@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_application_6/auth/login.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -9,15 +10,17 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
+  final TextEditingController namaController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
   Future<void> registerUser() async {
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
+      await userCredential.user?.updateDisplayName(namaController.text);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Registration Successful!")),
       );
@@ -52,6 +55,15 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 20),
               TextField(
+                controller: namaController,
+                decoration: InputDecoration(
+                  labelText: "Nama Lengkap",
+                  border: OutlineInputBorder(),
+                  prefixIcon: const Icon(Icons.verified_user),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
                 controller: emailController,
                 decoration: InputDecoration(
                   labelText: "Email",
@@ -73,6 +85,16 @@ class _RegisterPageState extends State<RegisterPage> {
               ElevatedButton(
                 onPressed: registerUser,
                 child: const Text("Register"),
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+                child: const Text("Sudah Punya Akun? Login disini."),
               ),
             ],
           ),

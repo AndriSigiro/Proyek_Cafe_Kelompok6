@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_6/widgets/home_bottom_bar.dart';
 import 'package:flutter_application_6/widgets/items_widget.dart';
 
@@ -8,12 +9,19 @@ class HomeScreen  extends StatefulWidget{
 }
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin{
   late TabController _tabController;
+  String displayName = "Guest";
 
   @override
   void initState(){
     _tabController =TabController(length: 4, vsync: this, initialIndex: 0);
     _tabController.addListener(_handleTabSelection);
     super.initState();
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null && user.displayName != null) {
+      setState(() {
+        displayName = user.displayName!;
+      });
+    }
   }
 
   _handleTabSelection(){
@@ -33,29 +41,39 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
   @override
   Widget build(BuildContext context){
     return Scaffold(
-      body: SafeArea(child: Padding(padding: EdgeInsets.only(top: 15),
-      child: ListView(
-        children: [
-          Padding(padding: EdgeInsets.symmetric(horizontal: 15),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 15),
+          child: ListView(
             children: [
-              InkWell(
-                onTap: (){},
-                child: Icon(Icons.sort_rounded,
-                color: Colors.white.withOpacity(0.5),
-                size: 35,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("$displayName")),
+                        );
+                      },
+                      child: Icon(
+                        Icons.sort_rounded,
+                        color: Colors.white.withOpacity(0.5),
+                        size: 35,
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Icon(
+                        Icons.notifications,
+                        color: Colors.white.withOpacity(0.5),
+                        size: 35,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              InkWell(
-                onTap: (){},
-                child: Icon(Icons.notifications,
-                color: Colors.white.withOpacity(0.5),
-                size: 35,
-                ),
-              ),
-            ],
-          ),),
           SizedBox(height: 30),
           Padding(padding: EdgeInsets.symmetric(horizontal: 15),
           child: Text("It's a Great Day for Coffe",

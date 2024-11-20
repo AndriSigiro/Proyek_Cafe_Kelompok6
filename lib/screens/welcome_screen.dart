@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_application_6/screens/home_screen.dart';
-import 'package:google_fonts/google_fonts.dart'; // Pastikan ini di-import
+import 'package:flutter_application_6/auth/login.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -46,7 +46,7 @@ class WelcomeScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(), // Pastikan HomeScreen ada atau sudah diimport
+                        builder: (context) => LoginPage(),
                       ),
                     );
                   },
