@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_6/auth/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
@@ -32,13 +33,16 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
+  Future<void> _simpanNamaLengkap(String nama) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.setString('namaLengkap', nama);
+}
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown[100],
-      appBar: AppBar(
-        title: const Text("Register"),
-      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -59,7 +63,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 decoration: InputDecoration(
                   labelText: "Nama Lengkap",
                   border: OutlineInputBorder(),
-                  prefixIcon: const Icon(Icons.verified_user),
+                  prefixIcon: const Icon(Icons.supervised_user_circle),
                 ),
               ),
               const SizedBox(height: 20),

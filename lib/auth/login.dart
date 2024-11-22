@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_application_6/auth/register.dart';
-import 'package:flutter_application_6/screens/welcome_screen.dart'; // Pastikan import WelcomeScreen
+import 'package:flutter_application_6/screens/home_screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -24,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
       // Jika login berhasil, navigasi ke WelcomeScreen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => WelcomeScreen()),
+        MaterialPageRoute(builder: (context) => HomeScreen()),
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Text(
-                "Welcome to CoffeeShop",
+                "Welcome to DEL Cafe",
                 style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -87,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     MaterialPageRoute(builder: (context) => const RegisterPage()),
                   );
                 },
-                child: const Text("Don't have an account? Register here."),
+                child: const Text("Tidak Memiliki Akun? Register disini."),
               ),
             ],
           ),

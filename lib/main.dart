@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_6/auth/login.dart';
 import 'package:flutter_application_6/firebase_options.dart';
+import 'package:flutter_application_6/screens/home_screen.dart';
 import 'package:flutter_application_6/screens/welcome_screen.dart';
 
 void main() async {
@@ -21,7 +23,12 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFF212325),
       ),
-      home: WelcomeScreen(),
+      initialRoute: '/welcome',
+      routes: {
+        '/welcome': (context) => WelcomeScreen(),
+        '/home': (context) => HomeScreen(),
+        '/login': (context) => LoginPage(),
+      },
     );
   }
 }
