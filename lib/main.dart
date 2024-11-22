@@ -1,12 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_6/auth/login.dart';
 import 'package:flutter_application_6/firebase_options.dart';
-import 'package:flutter_application_6/screens/home_screen.dart';
 import 'package:flutter_application_6/screens/welcome_screen.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized(); // Tambahkan ini untuk menginisialisasi widget sebelum menjalankan async function
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -14,7 +12,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key); // Tambahkan konstruktor
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +21,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xFF212325),
       ),
-      initialRoute: '/welcome',
-      routes: {
-        '/welcome': (context) => WelcomeScreen(),
-        '/home': (context) => HomeScreen(),
-        '/login': (context) => LoginPage(),
-      },
+      home: WelcomeScreen(),
     );
   }
 }

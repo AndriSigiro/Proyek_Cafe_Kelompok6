@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_6/auth/login.dart';
 import 'package:flutter_application_6/widgets/home_bottom_bar.dart';
 import 'package:flutter_application_6/widgets/items_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String routeName = '/home';
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
@@ -47,10 +49,13 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   }
 
   void _logout() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
-    Navigator.pushReplacementNamed(context, '/login');
-  }
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  await prefs.clear();
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(builder: (context) => LoginPage()),
+  );
+}
 
   void _toggleMenu() {
     if (isMenuOpen) {
@@ -213,7 +218,7 @@ Widget build(BuildContext context) {
                   title: const Text('Home', style: TextStyle(color: Colors.white)),
                   onTap: () {
                     _toggleMenu();
-                    Navigator.popUntil(context, ModalRoute.withName('/home'));
+                    Navigator.pushNamed(context, HomeScreen.routeName);
                   },
                 ),
                 ListTile(
