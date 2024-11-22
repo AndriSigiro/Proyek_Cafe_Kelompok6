@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_6/auth/login.dart';
 import 'package:flutter_application_6/widgets/home_bottom_bar.dart';
@@ -14,7 +15,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late TabController _tabController;
   late AnimationController _animationController;
   late Animation<Offset> _menuAnimation;
-  String namaLengkap = "Guest";
+  String namaLengkap = "";
+  String email = "";
   bool isMenuOpen = false;
 
   final Color mainColor = const Color(0xFFE57734);
@@ -23,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+     _loadUserData();
     _tabController = TabController(length: 4, vsync: this);
     _tabController.addListener(_handleTabSelection);
 
@@ -38,14 +41,28 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
     );
 
-    _loadNamaLengkap();
+    _loadUserData();
   }
 
-  Future<void> _loadNamaLengkap() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      namaLengkap = prefs.getString('namaLengkap') ?? '$namaLengkap';
-    });
+  Future<void> _loadUserData() async {
+    try {
+      // Get current Firebase user
+      User? currentUser = FirebaseAuth.instance.currentUser;
+      
+      if (currentUser != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        setState(() {
+          namaLengkap = prefs.getString('namaLengkap') ?? currentUser.displayName ?? '';
+          email = currentUser.email ?? '';
+          
+          if (email.isNotEmpty) {
+            prefs.setString('email', email);
+          }
+        });
+      }
+    } catch (e) {
+      print('Error loading user data: $e');
+    }
   }
 
   void _logout() async {
@@ -58,17 +75,14 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
 }
 
   void _toggleMenu() {
-    if (isMenuOpen) {
-      _animationController.reverse();
-      setState(() {
-        isMenuOpen = false;
-      });
-    } else {
-      _animationController.forward();
-      setState(() {
-        isMenuOpen = true;
-      });
-    }
+    setState(() {
+      isMenuOpen = !isMenuOpen;
+      if (isMenuOpen) {
+        _animationController.forward();
+      } else {
+        _animationController.reverse();
+      }
+    });
   }
 
   void _handleTabSelection() {
@@ -87,11 +101,10 @@ Widget build(BuildContext context) {
   return Scaffold(
     body: Stack(
       children: [
-        // GestureDetector menutupi seluruh layar untuk menutup menu ketika ditekan
         GestureDetector(
           onTap: () {
             if (isMenuOpen) {
-              _toggleMenu(); // Menutup menu jika ada tap di area luar
+              _toggleMenu();
             }
           },
         ),
@@ -203,12 +216,32 @@ Widget build(BuildContext context) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                CircleAvatar(
+                    backgroundColor: mainColor,
+                    radius: 30,
+                    child: Text(
+                      namaLengkap.isNotEmpty ? namaLengkap[0].toUpperCase() : '',
+                      style: const TextStyle(
+                        fontSize: 24,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 Text(
                   namaLengkap,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Text(
+                  email,
+                  style: const TextStyle(
+                    color: Colors.white70,
+                    fontSize: 14,
                   ),
                 ),
                 const SizedBox(height: 20),

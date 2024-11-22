@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_application_6/screens/favorite_list.dart';
 
 class SingleItemScreen extends StatelessWidget {
   final String img;
@@ -8,6 +9,7 @@ class SingleItemScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF212325),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -61,8 +63,7 @@ class SingleItemScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            padding: const EdgeInsets.all(15),
-                            width: 120,
+                            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 50),
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color: Colors.white.withOpacity(0.2),
@@ -157,15 +158,26 @@ class SingleItemScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.all(20),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFE57734),
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                            child: const Icon(
-                              Icons.favorite_outline,
-                              color: Colors.white,
+                          InkWell(
+                            onTap: () {
+                              // Tambahkan navigasi ke FavoriteList
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const FavoriteList(),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE57734),
+                                borderRadius: BorderRadius.circular(18),
+                              ),
+                              child: const Icon(
+                                Icons.favorite_outline,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                         ],
